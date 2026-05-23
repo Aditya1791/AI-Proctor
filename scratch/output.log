@@ -1,0 +1,2 @@
+2026-05-08 16:06:19.416265: E tensorflow/stream_executor/cuda/cuda_driver.cc:313] failed call to cuInit: UNKNOWN ERROR (303)
+Killed

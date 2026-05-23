@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Project AI - Live Exam Workspace</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<!-- Favicon -->
+<link rel="apple-touch-icon" sizes="120x120" href="{{ url_for('static', filename='assets/img/favicon/apple-touch-icon.png') }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='assets/img/favicon/favicon-32x32.png') }}">
+<link rel="icon" type="image/png" sizes="16x16"  href="{{ url_for('static', filename='assets/img/favicon/favicon-16x16.png') }}">
+<link rel="manifest" href="{{ url_for('static', filename='assets/img/favicon/site.webmanifest') }}">
+<link rel="mask-icon" color="#ffffff"  href="{{ url_for('static', filename='static/assets/img/favicon/safari-pinned-tab.svg') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='snackbar.min.css') }}"/> 
+<script src="{{ url_for('static', filename='snackbar.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+<!-- Fontawesome -->
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='vendor/@fortawesome/fontawesome-free/css/all.min.css') }}">
+
+<!-- Futuristic Dark CSS -->
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/futuristic.css') }}">
+
+<!-- Snackbar CSS -->
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='mysnackbarcss.css') }}">
+
+<script src="{{ url_for('static', filename='volt/vendor/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+
+    {% block head %}{% endblock %}
+
+    <style>
+      body {
+        padding-top: 20px !important;
+        margin-bottom: 50px;
+        background-color: #07090f !important;
+      }
+      .glass-card {
+        background: rgba(16, 21, 38, 0.75) !important;
+        border: 1px solid rgba(0, 243, 255, 0.15) !important;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6) !important;
+        backdrop-filter: blur(16px) !important;
+        border-radius: 16px !important;
+      }
+      .text-neon-cyan {
+        color: #00f3ff !important;
+        text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+      }
+      .text-neon-purple {
+        color: #9d00ff !important;
+        text-shadow: 0 0 10px rgba(157, 0, 255, 0.3);
+      }
+    </style>
+  </head>
+
+  <body class="content-bg">
+      <canvas id="bg-animation" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none;"></canvas>
+
+      <div id="snackbar">Don't try to open a new window or any other applications. We are Monitoring you!</div>
+      
+      {% block body %}{% endblock %}
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- Core -->
+<script src="{{ url_for('static', filename='vendor/popper.js/dist/umd/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+
+<!-- Particle Canvas Animation Script -->
+<script>
+    const canvas = document.getElementById('bg-animation');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+
+    function init() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      particles = [];
+      for (let i = 0; i < 80; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          size: Math.random() * 2 + 1
+        });
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = 'rgba(0, 243, 255, 0.4)';
+      ctx.beginPath();
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+        ctx.moveTo(p.x, p.y);
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      });
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0, 243, 255, 0.08)';
+      ctx.beginPath();
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+          }
+        }
+      }
+      ctx.stroke();
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+    draw();
+</script>
+</body>
+</html>

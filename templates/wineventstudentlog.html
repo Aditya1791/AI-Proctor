@@ -1,0 +1,68 @@
+{% extends 'professor_dashboard.html' %}
+{% block body %}
+<div class="container-fluid py-4">
+    <!-- Header Block -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="glass-card p-4 d-flex justify-content-between align-items-center flex-wrap" style="gap: 15px;">
+                <div>
+                    <h3 class="h3 mb-1 text-gradient-cyan">Student Window Logs</h3>
+                    <p class="text-muted mb-0">
+                        <span class="fas fa-id-card text-neon-cyan me-1"></span> Exam ID: <strong>{{ testid }}</strong> 
+                        <span class="ms-3 fas fa-envelope text-gradient-purple me-1"></span> Student: <strong>{{ email }}</strong>
+                    </p>
+                </div>
+                <button class="btn btn-sm btn-outline-secondary" onclick="location.href='/studentmonitoringstats/{{ testid }}/{{ email }}'">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Stats
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table Block -->
+    <div class="row">
+        <div class="col-12">
+            <div class="glass-card p-4">
+                <div class="table-responsive">
+                    <table id="example" class="display nowrap" style="width:100%">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="border-0" scope="col">NAME</th>
+                                <th class="border-0" scope="col">WINDOW EVENT</th>
+                                <th class="border-0" scope="col">TIME</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for res in callresults %}
+                            <tr>
+                                <td>{{ res['name'] }}</td>
+                                <td>
+                                    <span class="badge badge-danger" style="font-size: 0.85rem; padding: 6px 12px; border-radius: 4px; background-color: #dc3545; color: #fff;">
+                                        ⚠️ Tab Switched / Browser Minimized
+                                    </span>
+                                    <div class="text-muted" style="font-size: 0.8rem; margin-top: 4px;">
+                                        Student navigated away from the exam window (unpermitted browser focus loss).
+                                    </div>
+                                </td>
+                                <td>{{ res['transaction_log'] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,257 @@
+{% extends 'exam_layout.html' %}
+{% block body %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='sdk.js') }}"></script>
+<script>var tid = "{{test_id}}";</script>
+
+<style>
+  /* Consistent Premium Exam Workspace Styling */
+  .exam-hud {
+    background: rgba(10, 15, 30, 0.6);
+    border: 1px solid rgba(0, 243, 255, 0.15);
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    backdrop-filter: blur(10px);
+  }
+  .hud-badge {
+    background: rgba(0, 243, 255, 0.05);
+    border: 1px solid rgba(0, 243, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    color: #e2e8f0;
+  }
+  .hud-badge span {
+    color: var(--neon-cyan);
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(0,243,255,0.4);
+  }
+  .timer-box {
+    background: rgba(255, 75, 75, 0.05);
+    border: 1px solid rgba(255, 75, 75, 0.3);
+    color: #ff4b4b;
+    text-shadow: 0 0 10px rgba(255, 75, 75, 0.4);
+    box-shadow: inset 0 0 10px rgba(255, 75, 75, 0.1);
+  }
+  .timer-box #time {
+    font-size: 1.2rem;
+    font-weight: 900;
+  }
+  
+  /* Question / IDE Pane */
+  .question-pane {
+    background: rgba(16, 21, 38, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 30px;
+    min-height: 500px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    backdrop-filter: blur(15px);
+  }
+  
+  .practical-question-header {
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+  }
+  
+  .que-number {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--neon-cyan);
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .que-text {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #fff;
+    font-weight: 500;
+  }
+  
+  /* Readonly Code / Output Telemetry */
+  .terminal-box {
+    background: #03060c !important;
+    border: 1px solid rgba(0, 243, 255, 0.1) !important;
+    color: #39ff14 !important; /* Matrix Green */
+    font-family: 'Courier New', Courier, monospace !important;
+    font-size: 0.95rem !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    transition: all 0.3s ease;
+  }
+  .terminal-box:focus {
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.2) !important;
+    border-color: #39ff14 !important;
+  }
+  
+  /* Widgets */
+  .widget-card {
+    background: rgba(16, 21, 38, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 15px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+  }
+  .widget-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    color: var(--neon-cyan);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .widget-title i {
+    animation: pulse 1.5s infinite;
+  }
+  
+  /* Video feed */
+  #stream {
+    width: 100% !important;
+    height: 160px !important;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid rgba(255, 75, 75, 0.3);
+    background: #000;
+  }
+  #otEmbedContainer {
+    width: 100% !important;
+    height: 160px !important;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 243, 255, 0.3);
+  }
+</style>
+
+<main class="py-4">
+  <div class="container-fluid px-4">
+    <!-- TOP TELEMETRY HUD BAR -->
+    <div class="row">
+      <div class="col-12">
+        <div class="exam-hud d-flex flex-wrap justify-content-between align-items-center gap-3">
+          <div class="d-flex align-items-center gap-3">
+            <div class="hud-badge">Candidate: <span>{{session['name']}}</span></div>
+            <div class="hud-badge d-none d-md-block">Email: <span>{{session['email']}}</span></div>
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <div class="hud-badge">Subject: <span>{{subject}}</span></div>
+            <div class="hud-badge d-none d-lg-block">Topic: <span>{{topic}}</span></div>
+            <div class="hud-badge">Exam-ID: <span>{{test_id}}</span></div>
+            <div class="hud-badge timer-box d-flex align-items-center gap-2">
+              <i class="fas fa-clock"></i>
+              <div id="time">{{duration}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN WORKSPACE ROW -->
+    <div class="row">
+      <!-- LEFT PANE: QUESTIONS & CODING EDITOR (8 Columns) -->
+      <div class="col-lg-8 mb-4">
+        <div class="question-pane">
+          <form action="" method="POST" id="prac">
+            {% for test in callresults %}
+              <div class="practical-question-header">
+                <div class="que-number">Practical Challenge</div>
+                <div class="que-text mb-3">Q. {{test['qid']}} {{test['q']}}</div>
+                <span class="badge mb-3" style="background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.25); color: #00f3ff; font-family: 'Orbitron', sans-serif;">Max Marks: {{test['marks']}}</span>
+              </div>
+
+              <!-- EMULATOR / CODE COMPILER WIDGET -->
+              <div class="form-group mb-4">
+                <div class="mb-3 text-muted small" style="font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px;">Interactive Code Workspace:</div>
+                <div class="p-3 border rounded" style="background: rgba(0,0,0,0.5); border-color: rgba(0, 243, 255, 0.15) !important;">
+                  <div data-id="example-widget" data-widget="4bada29b6d7c88d59406aa65c3d823ae"></div>
+                </div>
+              </div>
+
+              <!-- CODE TELEMETRY DISPLAY -->
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <div class="form-group mb-0">
+                    <label class="h6 text-muted small" style="font-family: 'Orbitron', sans-serif;">Code Entered By You:</label>
+                    <textarea id="codeByStudent" name="codeByStudent" class="form-control terminal-box" rows="8" readonly></textarea>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="form-group mb-3">
+                    <label class="h6 text-muted small" style="font-family: 'Orbitron', sans-serif;">Input Entered By You:</label>
+                    <textarea id="inputByStudent" name="inputByStudent" class="form-control terminal-box" rows="3" readonly></textarea>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="h6 text-muted small" style="font-family: 'Orbitron', sans-serif;">Execution Status:</label>
+                    <textarea id="executedByStudent" name="executedByStudent" class="form-control terminal-box" rows="2" readonly></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <input type="hidden" name="test_id" value="{{ test_id }}">
+              
+              <div class="form-group mt-4 pt-3 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
+                <button type="submit" class="btn-neon w-100 py-3 text-center" style="background: linear-gradient(90deg, rgba(157, 0, 255, 0.2), rgba(0, 243, 255, 0.2)); border-color: #9d00ff; color: #fff; font-size: 1.1rem; font-weight: bold; text-shadow: 0 0 10px rgba(157,0,255,0.6); border-radius: 30px;"><i class="fas fa-flag-checkered mr-2"></i> Submit & Finish Exam</button>
+              </div>
+            {% endfor %}
+          </form>
+        </div>
+      </div>
+
+      <!-- RIGHT PANE: MONITORING & TOOLS (4 Columns) -->
+      <div class="col-lg-4">
+        <!-- SYSTEM NOTICE CARD -->
+        <div class="widget-card mb-4" style="border-color: rgba(157, 0, 255, 0.2) !important;">
+          <div class="widget-title" style="color: #9d00ff;"><i class="fas fa-info-circle mr-2"></i> Exam Instructions</div>
+          <p class="text-muted small mb-0" style="line-height: 1.5;">
+            Run and test your code inside the active compiler workspace widget above. Once the code executes successfully, the local terminal logs will sync automatically. Ensure your camera frame remains well-lit and your microphone active throughout the session.
+          </p>
+        </div>
+
+        <!-- CAMERA MONITORING FEED -->
+        <div class="widget-card mb-4">
+          <div class="widget-title"><i class="fas fa-circle text-danger mr-2"></i> Proctoring AI Monitor</div>
+          <div id="videocheck" style="display: none;">
+            <video id="stream" autoplay playsinline muted></video>
+            <canvas id="capture" width="320" height="240" style="display: none;"></canvas>
+          </div>
+          <div id="livecheck" style="display: none;">
+            <div id="otEmbedContainer">
+              <script src="https://tokbox.com/embed/embed/ot-embed.js?embedId=2020dbd9-0a89-472d-a60b-ca12ddfd48bc&room={{test_id}}"></script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script type="text/javascript" src="{{ url_for('static', filename='apppractical.js') }}"></script>
+<script>
+  var vid = "{{proctortypep}}";
+  console.log(vid)
+  if(vid == "0") {
+    document.getElementById('videocheck').style.display = "block"
+    startStreaming();
+    captureSnapshot();
+  } else {
+    document.getElementById('livecheck').style.display = "block"
+  }
+</script>
+
+<footer id="sticky-footer" class="py-4 mt-5 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
+  <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
+    <p class="font-weight-bold font-medium mb-0 text-white">Copyright © Project AI
+      <span class="current-year text-neon-cyan"><script>document.write(new Date().getFullYear())</script></span>. All rights reserved.
+    </p>
+  </div>
+  <div class="d-flex text-center justify-content-center align-items-center mt-2" role="contentinfo">
+    <p class="font-weight-bold font-small mb-0"><span><a href="https://www.linkedin.com/in/aditya-ranjan-swain/" class="text-gradient-purple">Made with 💖 By ADITYA SWAIN</a></span></p>
+  </div>
+</footer>
+{% endblock %}

@@ -1,0 +1,342 @@
+{% extends 'exam_layout.html' %}
+{% block body %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript"> var answers = "{{answers}}";</script>
+<script>var tid = "{{tid}}";</script>
+
+<style>
+  /* Premium Exam Interface Enhancements */
+  .exam-hud {
+    background: rgba(10, 15, 30, 0.6);
+    border: 1px solid rgba(0, 243, 255, 0.15);
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    backdrop-filter: blur(10px);
+  }
+  .hud-badge {
+    background: rgba(0, 243, 255, 0.05);
+    border: 1px solid rgba(0, 243, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    color: #e2e8f0;
+  }
+  .hud-badge span {
+    color: var(--neon-cyan);
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(0,243,255,0.4);
+  }
+  .timer-box {
+    background: rgba(255, 75, 75, 0.05);
+    border: 1px solid rgba(255, 75, 75, 0.3);
+    color: #ff4b4b;
+    text-shadow: 0 0 10px rgba(255, 75, 75, 0.4);
+    box-shadow: inset 0 0 10px rgba(255, 75, 75, 0.1);
+  }
+  .timer-box #time {
+    font-size: 1.2rem;
+    font-weight: 900;
+  }
+  
+  /* Question Pane */
+  .question-pane {
+    background: rgba(16, 21, 38, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 30px;
+    min-height: 500px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    backdrop-filter: blur(15px);
+  }
+  
+  .que-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+  }
+  .que-number {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--neon-cyan);
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .que-text {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: #fff;
+    font-weight: 500;
+  }
+  
+  /* MCQ Option Cards */
+  #options {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+  #options tbody, #options tr {
+    display: block;
+    width: 100%;
+  }
+  #options td {
+    display: block;
+    width: 100%;
+    padding: 16px 22px !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 10px !important;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 1.05rem;
+    color: #cbd5e1 !important;
+    transition: all 0.2s ease-in-out;
+  }
+  #options td:hover {
+    background: rgba(0, 243, 255, 0.06) !important;
+    border-color: rgba(0, 243, 255, 0.4) !important;
+    color: #fff !important;
+    transform: translateX(5px);
+    box-shadow: 0 0 15px rgba(0,243,255,0.1);
+  }
+  
+  /* Question Palette Grid */
+  .grid-pane {
+    background: rgba(10, 14, 26, 0.8);
+    border: 1px solid rgba(0, 243, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    backdrop-filter: blur(12px);
+  }
+  .grid-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+  #question-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+  #question-list .col-sm-2 {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    flex: none !important;
+  }
+  #question-list button {
+    width: 100%;
+    height: 38px;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    font-weight: bold;
+    border-radius: 6px;
+    border: none !important;
+    transition: all 0.2s ease;
+  }
+  #question-list button:hover {
+    transform: scale(1.08);
+    filter: brightness(1.2);
+  }
+  
+  /* Widgets (Camera, Calculator) */
+  .widget-card {
+    background: rgba(16, 21, 38, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 15px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+  }
+  .widget-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    color: var(--neon-cyan);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .widget-title i {
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+  }
+  
+  /* Video Feed Styling */
+  #stream {
+    width: 100% !important;
+    height: 160px !important;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid rgba(255, 75, 75, 0.3);
+    background: #000;
+  }
+  #otEmbedContainer {
+    width: 100% !important;
+    height: 160px !important;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 243, 255, 0.3);
+  }
+</style>
+
+<main class="py-4">
+  <div class="container-fluid px-4">
+    <!-- TOP TELEMETRY HUD BAR -->
+    <div class="row">
+      <div class="col-12">
+        <div class="exam-hud d-flex flex-wrap justify-content-between align-items-center gap-3">
+          <div class="d-flex align-items-center gap-3">
+            <div class="hud-badge">Candidate: <span>{{session['name']}}</span></div>
+            <div class="hud-badge d-none d-md-block">Email: <span>{{session['email']}}</span></div>
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <div class="hud-badge">Subject: <span>{{subject}}</span></div>
+            <div class="hud-badge d-none d-lg-block">Topic: <span>{{topic}}</span></div>
+            <div class="hud-badge">Exam-ID: <span>{{tid}}</span></div>
+            <div class="hud-badge timer-box d-flex align-items-center gap-2">
+              <i class="fas fa-clock"></i>
+              <div id="time">{{duration}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN WORKSPACE ROW -->
+    <div class="row">
+      <!-- LEFT PANE: QUESTIONS & OPTIONS (8 Columns) -->
+      <div class="col-lg-8 mb-4">
+        <div class="question-pane">
+          <div class="que-header">
+            <div id="queid" class="que-number">Question No. 1</div>
+            <div id="que" class="que-text">{{ q }}</div>
+            <div id="mark" class="badge mt-2" style="background: rgba(157, 0, 255, 0.15); border: 1px solid rgba(157, 0, 255, 0.3); color: #c269ff; font-family: 'Orbitron', sans-serif;">Marks: {{ marks}}</div>
+          </div>
+
+          <div class="form-group mb-4">
+            <label class="h6 text-muted mb-3" style="font-family: 'Orbitron', sans-serif; letter-spacing: 1px; font-size: 0.8rem;">Select your Option</label>
+            <table id="options" class="table">
+              <tr>
+                <td id='a'>𝐀. {{ a }}</td>
+              </tr>
+              <tr>
+                <td id='b'>𝐁. {{ b }}</td>
+              </tr>
+              <tr>
+                <td id='c'>𝐂. {{ c }}</td>
+              </tr>
+              <tr>
+                <td id='d'>𝐃. {{ d }}</td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- CYBER CONTROLLER BUTTONS -->
+          <div class="row mt-4">
+            <div class="col-md-3 col-6 mb-2">
+              <button id="prev" class="btn-neon w-100 py-2" style="border-radius: 8px;"><i class="fas fa-chevron-left mr-2"></i> Prev</button>
+            </div>
+            <div class="col-md-3 col-6 mb-2">
+              <button id="next" class="btn-neon w-100 py-2" style="border-radius: 8px;">Next <i class="fas fa-chevron-right ml-2"></i></button>
+            </div>
+            <div class="col-md-3 col-6 mb-2">
+              <button id="bookmark" class="btn-neon w-100 py-2" style="border-radius: 8px; border-color: #ff9d00; color: #ff9d00;"><i class="fas fa-bookmark mr-2"></i> Bookmark</button>
+            </div>
+            <div class="col-md-3 col-6 mb-2">
+              <button id="submit" class="btn-neon w-100 py-2" style="border-radius: 8px; border-color: #00ff66; color: #00ff66;"><i class="fas fa-save mr-2"></i> Save Answer</button>
+            </div>
+          </div>
+
+          <div class="form-group mt-4 pt-3 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
+            <button class="btn-neon w-100 py-3 text-center" id="finish" style="background: linear-gradient(90deg, rgba(157, 0, 255, 0.2), rgba(0, 243, 255, 0.2)); border-color: #9d00ff; color: #fff; font-size: 1.1rem; font-weight: bold; text-shadow: 0 0 10px rgba(157,0,255,0.6); border-radius: 30px;"><i class="fas fa-flag-checkered mr-2"></i> Submit & Finish Test</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT PANE: PALETTE, VIDEO PROCTORING, WIDGETS (4 Columns) -->
+      <div class="col-lg-4">
+        <!-- QUESTION PALETTE GRID -->
+        <div class="grid-pane mb-4">
+          <div class="grid-title"><i class="fas fa-th mr-2 text-neon-cyan"></i> Question Palette</div>
+          <div id="overlay">
+            <div id="question-list"></div>
+          </div>
+          <div class="d-flex flex-wrap gap-2 mt-3 text-muted small justify-content-between">
+            <div><i class="fas fa-square mr-1" style="color: #1976D2;"></i> Unvisited</div>
+            <div><i class="fas fa-square mr-1" style="color: #42ed62;"></i> Answered</div>
+            <div><i class="fas fa-square mr-1" style="color: #e6ed7b;"></i> Bookmarked</div>
+          </div>
+        </div>
+
+        <!-- CAMERA MONITORING FEED -->
+        <div class="widget-card">
+          <div class="widget-title"><i class="fas fa-circle text-danger mr-2"></i> Proctoring AI Monitor</div>
+          <div id="videocheck" style="display: none;">
+            <video id="stream" autoplay playsinline muted></video>
+            <canvas id="capture" width="320" height="240" style="display: none;"></canvas>
+          </div>
+          <div id="livecheck" style="display: none;">
+            <div id="otEmbedContainer">
+              <script src="https://tokbox.com/embed/embed/ot-embed.js?embedId=2020dbd9-0a89-472d-a60b-ca12ddfd48bc&room={{tid}}"></script>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCIENTIFIC CALCULATOR -->
+        <div class="widget-card" id="calccheck" style="display: none;">
+          <div class="widget-title"><i class="fas fa-calculator mr-2 text-neon-cyan"></i> Scientific Calculator</div>
+          <iframe src="/calc" style="height:320px; width:100%; border: none; border-radius: 10px;" title="Embedded Calculator"></iframe> 
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+<script>
+  var cal = "{{calc}}";
+  console.log(cal)
+  if(cal == "1") {
+    document.getElementById('calccheck').style.display = "block"
+  } else {
+    document.getElementById('calccheck').style.display = "none"
+  }
+  
+  var vid = "{{proctortype}}";
+  console.log(vid)
+  if(vid == "0") {
+    document.getElementById('videocheck').style.display = "block"
+    startStreaming();
+    captureSnapshot();
+  } else {
+    document.getElementById('livecheck').style.display = "block"
+  }
+</script>
+
+<footer id="sticky-footer" class="py-4 mt-5 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
+  <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
+    <p class="font-weight-bold font-medium mb-0 text-white">Copyright © Project AI
+      <span class="current-year text-neon-cyan"><script>document.write(new Date().getFullYear())</script></span>. All rights reserved.
+    </p>
+  </div>
+  <div class="d-flex text-center justify-content-center align-items-center mt-2" role="contentinfo">
+    <p class="font-weight-bold font-small mb-0"><span><a href="https://www.linkedin.com/in/aditya-ranjan-swain/" class="text-gradient-purple">Made with 💖 By ADITYA SWAIN</a></span></p>
+  </div>
+</footer>
+{% endblock %}

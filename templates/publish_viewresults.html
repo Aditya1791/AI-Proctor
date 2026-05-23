@@ -1,0 +1,95 @@
+{% extends 'professor_dashboard.html' %}
+{% block body %}
+<div class="container-fluid py-4">
+    <!-- Header Block -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="glass-card p-4 text-center">
+                <h3 class="h3 mb-2 text-gradient-cyan">Publish Student Results</h3>
+                <p class="text-muted mb-0">
+                    <span class="fas fa-id-card text-neon-cyan me-1"></span> Exam ID: <strong>{{ tid }}</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="row">
+        <div class="col-12">
+            {% if callresults is not none and callresults|length > 0 %}
+            <div class="glass-card p-4 shadow-sm">
+                <form id="prs" action="/publish_results" method="POST">
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap mb-4 rounded">
+                            <thead>
+                                <tr>
+                                    <th scope="col"><i class="fas fa-envelope text-neon-cyan me-1"></i> Email</th>
+                                    <th scope="col"><i class="fas fa-trophy text-neon-cyan me-1"></i> Marks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for result in callresults %}
+                                <tr>
+                                    <td class="font-weight-bold" style="color: var(--text-main);">{{ result['email'] }}</td>
+                                    <td>
+                                        <span class="badge bg-purple-subtle text-purple px-3 py-2" style="font-size: 0.9rem; font-family: 'Orbitron', sans-serif; border: 1px solid var(--neon-purple); background: rgba(157, 0, 255, 0.1);">
+                                            {{ result['marks'] }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <input type="hidden" name="testidsp" value="{{ tid }}">
+                    </div>
+                    <div class="text-center mt-3">
+                        <button type="button" class="btn-neon px-5 py-2.5" style="font-size: 1rem;" onclick="publishResults()">
+                            <i class="fas fa-paper-plane me-1"></i> PUBLISH RESULTS
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {% else %}
+            <div class="glass-card p-5 text-center shadow-sm">
+                <lottie-player src="https://assets7.lottiefiles.com/datafiles/vhvOcuUkH41HdrL/data.json" background="transparent" speed="1" style="width: 250px; height: 250px; margin: 0 auto;" loop autoplay></lottie-player>
+                <h3 class="h4 mt-3">No Student Records Found!</h3>
+                <p class="text-muted">No student submissions were found for this Exam ID yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function publishResults() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you really want to publish these results?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Publish Results!',
+            cancelButtonText: 'No!',
+            confirmButtonColor: '#00f3ff',
+            cancelButtonColor: '#202124',
+            reverseButtons: true,
+            background: 'rgba(16, 21, 38, 0.95)',
+            color: '#fff'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("prs").submit();
+                Swal.fire(
+                    'Success!',
+                    'Results have been successfully published.',
+                    'success'
+                )
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire(
+                    'Cancelled',
+                    'Publishing was cancelled.',
+                    'error'
+                )
+            }
+        })
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,21 @@
+# Project AI
+
+[Project AI](http://localhost:5001/)
+- 
+      [Login](http://localhost:5001/login)
+- 
+        [Register](http://localhost:5001/register)
+- 
+        [Contact Us](http://localhost:5001/contact)
+- 
+        [FAQ](http://localhost:5001/faq)
+[Login](http://localhost:5001/login)
+[Register](http://localhost:5001/register)
+[Contact Us](http://localhost:5001/contact)
+[FAQ](http://localhost:5001/faq)
+
+# Sign in to our platform
+[Lost password?](http://localhost:5001/lostpassword)
+[Create account](http://localhost:5001/register)
+Copyright © Project AI document.write(new Date().getFullYear()) . All rights reserved.
+[Made with 💗 By ADITYA RANJAN SWAIN](https://www.linkedin.com/in/aditya-ranjan-swain/)

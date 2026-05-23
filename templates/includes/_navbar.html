@@ -1,0 +1,116 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+<header class="header-global">
+  <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg glass-navbar fixed-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="/">
+        <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_wEt2nn.json" background="transparent"
+          speed="1" style="width: 50px; height: 50px; margin-right: 10px;" loop autoplay></lottie-player>
+        <span class="text-gradient-cyan" style="font-size:22px; font-weight: bold; letter-spacing: 2px;">Project
+          AI</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon">
+          <i class="fas fa-bars" style="color:#00f3ff; font-size:28px; text-shadow: var(--glow-shadow-cyan);"></i>
+        </span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="nav navbar-nav ml-auto align-items-center">
+          {% if session.logged_in %}
+          {% if session.user_role == "student" %}
+          <li class="nav-item mx-1">
+            <a class="btn-neon" style="padding: 8px 15px; font-size: 0.8rem;" href="/student_index"><span
+                class="fas fa-columns"> Dashboard</span></a>
+          </li>
+          <li class="nav-item mx-1">
+            <a class="btn-neon" style="padding: 8px 15px; font-size: 0.8rem;" href="/changepassword_student"><span
+                class="fas fa-key"> Change Password</span></a>
+          </li>
+          {% endif %}
+          {% if session.user_role == "teacher" %}
+          <li class="nav-item mx-1">
+            <a class="btn-neon" style="padding: 8px 15px; font-size: 0.8rem;" href="/professor_index"><span
+                class="fas fa-columns"> Dashboard</span></a>
+          </li>
+          <li class="nav-item mx-1">
+            <a class="btn-neon" style="padding: 8px 15px; font-size: 0.8rem;" href="/changepassword_professor"><span
+                class="fas fa-key"> Change Password</span></a>
+          </li>
+          {% endif %}
+          <li class="nav-item mx-1">
+            <a class="btn-neon" style="padding: 8px 15px; font-size: 0.8rem;" href="/contact"><span
+                class="fas fa-phone-alt"> Contact</span></a>
+          </li>
+          <li class="nav-item mx-1">
+            <a class="btn-neon" style="padding: 8px 15px; font-size: 0.8rem;" href="/faq"><span class="fas fa-question">
+                FAQ</span></a>
+          </li>
+          <li class="nav-item mx-1">
+            <a class="btn-neon" style="padding: 8px 15px; font-size: 0.8rem; border-color: #ff0055; color: #ff0055;"
+              href="#" onclick="return funLogout()"><span class="fas fa-sign-out-alt"> Logout</span></a>
+          </li>
+          {% else %}
+          <li class="nav-item mx-1">
+            <a class="btn-neon" style="padding: 8px 15px; font-size: 0.8rem;" href="/login"><span
+                class="fas fa-sign-in-alt"> Login</span></a>
+          </li>
+          <li class="nav-item mx-1">
+            <a class="btn-neon"
+              style="padding: 8px 15px; font-size: 0.8rem; border-color: var(--neon-purple); color: var(--neon-purple);"
+              href="/register"><span class="fas fa-user-plus"> Register</span></a>
+          </li>
+          <li class="nav-item mx-1">
+            <a class="btn-neon" style="padding: 8px 15px; font-size: 0.8rem;" href="/contact"><span
+                class="fas fa-phone-alt"> Contact</span></a>
+          </li>
+          <li class="nav-item mx-1">
+            <a class="btn-neon" style="padding: 8px 15px; font-size: 0.8rem;" href="/faq"><span class="fas fa-question">
+                FAQ</span></a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  function funLogout() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you really want to logout?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Logout me!',
+      cancelButtonText: 'No!',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#202124',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: "POST",
+          url: "/logout",
+          success: function (response) {
+            if (response == "success") {
+              Swal.fire({
+                title: 'Success!',
+                text: 'You have been successfully signed out from the system.',
+                icon: 'success'
+              }).then(() => {
+                window.location.href = "/";
+              });
+            }
+          }
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelled',
+          'Logout cancelled.',
+          'error'
+        )
+      }
+    });
+    return false;
+  }
+</script>

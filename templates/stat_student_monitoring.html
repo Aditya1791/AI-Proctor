@@ -1,0 +1,136 @@
+{% extends 'professor_dashboard.html' %}
+{% block body %}
+<div class="container-fluid py-4">
+    <!-- Header Block -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="glass-card p-4 text-center">
+                <h3 class="h3 mb-2 text-gradient-cyan">Student Monitoring Statistics</h3>
+                <p class="text-muted mb-0">
+                    <span class="fas fa-id-card text-neon-cyan me-1"></span> Exam ID: <strong>{{ testid }}</strong> 
+                    <span class="ms-3 fas fa-envelope text-gradient-purple me-1"></span> Student: <strong>{{ email }}</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Grid Row -->
+    <div class="row">
+        <!-- Card 1: Total Logs -->
+        <div class="col-lg-4 col-md-6 col-12 mb-4">
+            <div class="glass-card h-100 shadow-sm d-flex flex-column justify-content-between p-4" style="min-height: 250px;">
+                <div class="text-center">
+                    <div class="icon-box-stat text-neon-cyan mb-3" style="font-size: 2.5rem; filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.3));">
+                        <span class="fas fa-binoculars"></span>
+                    </div>
+                    <h5 class="h5 font-weight-bold text-uppercase tracking-wider" style="font-family: 'Orbitron', sans-serif;">Total Logs</h5>
+                    <h3 class="h1 font-weight-extrabold my-3" id="tot" style="color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.3); font-family: 'Orbitron', sans-serif;">--</h3>
+                    <p class="text-muted small">Total webcam images and coordinates captured</p>
+                </div>
+                <button class="btn-neon w-100 mt-2" onclick="location.href='/displaystudentslogs/{{ testid }}/{{ email }}'">
+                    <i class="fas fa-list-alt me-1"></i> VIEW LOGS
+                </button>
+            </div>
+        </div>
+
+        <!-- Card 2: Window Events -->
+        <div class="col-lg-4 col-md-6 col-12 mb-4">
+            <div class="glass-card h-100 shadow-sm d-flex flex-column justify-content-between p-4" style="min-height: 250px;">
+                <div class="text-center">
+                    <div class="icon-box-stat text-warning mb-3" style="font-size: 2.5rem; filter: drop-shadow(0 0 10px rgba(255, 193, 7, 0.3));">
+                        <span class="fas fa-window-restore"></span>
+                    </div>
+                    <h5 class="h5 font-weight-bold text-uppercase tracking-wider" style="font-family: 'Orbitron', sans-serif;">Window Switch Events</h5>
+                    <h3 class="h1 font-weight-extrabold my-3 text-warning" id="win" style="text-shadow: 0 0 8px rgba(255, 193, 7, 0.3); font-family: 'Orbitron', sans-serif;">--</h3>
+                    <p class="text-muted small">Times student switched tab or minimized browser</p>
+                </div>
+                <button class="btn-neon w-100 mt-2" style="border-color: #ffc107; color: #ffc107;" onclick="location.href='/wineventstudentslogs/{{ testid }}/{{ email }}'">
+                    <i class="fas fa-exclamation-triangle me-1"></i> VIEW SWITCHES
+                </button>
+            </div>
+        </div>
+
+        <!-- Card 3: Mobile Detected -->
+        <div class="col-lg-4 col-md-6 col-12 mb-4">
+            <div class="glass-card h-100 shadow-sm d-flex flex-column justify-content-between p-4" style="min-height: 250px;">
+                <div class="text-center">
+                    <div class="icon-box-stat text-danger mb-3" style="font-size: 2.5rem; filter: drop-shadow(0 0 10px rgba(255, 75, 75, 0.3));">
+                        <span class="fas fa-mobile-alt"></span>
+                    </div>
+                    <h5 class="h5 font-weight-bold text-uppercase tracking-wider" style="font-family: 'Orbitron', sans-serif;">Mobile Detected</h5>
+                    <h3 class="h1 font-weight-extrabold my-3 text-danger" id="mob" style="text-shadow: 0 0 8px rgba(255, 75, 75, 0.3); font-family: 'Orbitron', sans-serif;">--</h3>
+                    <p class="text-muted small">Logs where mobile phones were found in webcam</p>
+                </div>
+                <button class="btn-neon w-100 mt-2" style="border-color: #ff4b4b; color: #ff4b4b;" onclick="location.href='/mobdisplaystudentslogs/{{ testid }}/{{ email }}'">
+                    <i class="fas fa-ban me-1"></i> VIEW VIOLATIONS
+                </button>
+            </div>
+        </div>
+
+        <!-- Card 4: Multi-Person Detected -->
+        <div class="col-lg-4 col-md-6 col-12 mb-4">
+            <div class="glass-card h-100 shadow-sm d-flex flex-column justify-content-between p-4" style="min-height: 250px;">
+                <div class="text-center">
+                    <div class="icon-box-stat text-danger mb-3" style="font-size: 2.5rem; filter: drop-shadow(0 0 10px rgba(255, 75, 75, 0.3));">
+                        <span class="fas fa-user-friends"></span>
+                    </div>
+                    <h5 class="h5 font-weight-bold text-uppercase tracking-wider" style="font-family: 'Orbitron', sans-serif;">Multiple Persons</h5>
+                    <h3 class="h1 font-weight-extrabold my-3 text-danger" id="per" style="text-shadow: 0 0 8px rgba(255, 75, 75, 0.3); font-family: 'Orbitron', sans-serif;">--</h3>
+                    <p class="text-muted small">Events where multiple faces were identified</p>
+                </div>
+                <button class="btn-neon w-100 mt-2" style="border-color: #ff4b4b; color: #ff4b4b;" onclick="location.href='/persondisplaystudentslogs/{{ testid }}/{{ email }}'">
+                    <i class="fas fa-user-slash me-1"></i> VIEW PERSON LOGS
+                </button>
+            </div>
+        </div>
+
+        <!-- Card 5: Audio Monitoring -->
+        <div class="col-lg-4 col-md-6 col-12 mb-4">
+            <div class="glass-card h-100 shadow-sm d-flex flex-column justify-content-between p-4" style="min-height: 250px;">
+                <div class="text-center">
+                    <div class="icon-box-stat text-gradient-purple mb-3" style="font-size: 2.5rem; filter: drop-shadow(0 0 10px rgba(157, 0, 255, 0.3));">
+                        <span class="fas fa-microphone"></span>
+                    </div>
+                    <h5 class="h5 font-weight-bold text-uppercase tracking-wider" style="font-family: 'Orbitron', sans-serif;">Audio Anomalies</h5>
+                    <h3 class="h1 font-weight-extrabold my-3" id="aud" style="color: var(--neon-purple); text-shadow: 0 0 8px rgba(157, 0, 255, 0.3); font-family: 'Orbitron', sans-serif;">--</h3>
+                    <p class="text-muted small">Microphone volume spikes indicating disturbance</p>
+                </div>
+                <button class="btn-neon w-100 mt-2" style="border-color: var(--neon-purple); color: var(--neon-purple);" onclick="location.href='/audiodisplaystudentslogs/{{ testid }}/{{ email }}'">
+                    <i class="fas fa-volume-up me-1"></i> VIEW AUDIO LOGS
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var tid = "{{ testid }}";
+    var eid = "{{ email }}";
+
+    var updateStudentMonitoring = function() {
+        $.ajax({
+            type: 'POST',
+            url: "/ajaxstudentmonitoringstats/" + tid + "/" + eid,
+            contentType: 'application/json;charset=UTF-8',
+            cache: false,
+            success: function(msg) {
+                // Return fallback '0' instead of empty view if counts are null/undefined
+                $("#win").html(msg.win !== undefined && msg.win.length > 0 ? msg.win[0] : 0);
+                $("#mob").html(msg.mob !== undefined && msg.mob.length > 0 ? msg.mob[0] : 0);
+                $("#per").html(msg.per !== undefined && msg.per.length > 0 ? msg.per[0] : 0);
+                $("#tot").html(msg.tot !== undefined && msg.tot.length > 0 ? msg.tot[0] : 0);
+                $("#aud").html(msg.aud !== undefined && msg.aud.length > 0 ? msg.aud[0] : 0);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error("Monitoring stats load error:", textStatus, errorThrown);
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        updateStudentMonitoring();
+        // Live auto-refresh metrics every 5 seconds
+        var refInterval = window.setInterval(updateStudentMonitoring, 5000);
+    });
+</script>
+{% endblock %}

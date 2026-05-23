@@ -1,0 +1,141 @@
+{% extends 'professor_dashboard.html' %}
+{% block body %}
+<style>
+    .hub-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+    .hub-card {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(0, 243, 255, 0.2);
+        border-radius: 15px;
+        padding: 25px 15px;
+        text-align: center;
+        transition: all 0.3s ease;
+        text-decoration: none !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 180px; /* Square form */
+        position: relative;
+        overflow: hidden;
+    }
+    .hub-card:hover {
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.3), inset 0 0 10px rgba(0, 243, 255, 0.1);
+        transform: translateY(-5px);
+    }
+    .hub-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.1), transparent);
+        transition: all 0.5s ease;
+        z-index: 0;
+    }
+    .hub-card:hover::before {
+        left: 100%;
+    }
+    .hub-icon {
+        font-size: 2.5rem;
+        color: var(--neon-cyan);
+        margin-bottom: 15px;
+        z-index: 1;
+    }
+    .hub-title {
+        color: var(--text-main);
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.9rem;
+        font-weight: bold;
+        z-index: 1;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="text-gradient-cyan">Professor Hub</h1>
+            <p class="text-muted">Welcome back, {{session.name}}. Select an action below.</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xl-8 col-lg-12 col-md-12 mb-4">
+            <div class="hub-grid">
+        <a href="/create-test" class="hub-card">
+            <i class="fas fa-plus-circle hub-icon"></i>
+            <span class="hub-title">Objective Exam</span>
+        </a>
+        <a href="/create_test_lqa" class="hub-card">
+            <i class="fas fa-pen-fancy hub-icon"></i>
+            <span class="hub-title">Subjective Exam</span>
+        </a>
+        <a href="/create_test_pqa" class="hub-card">
+            <i class="fas fa-laptop-code hub-icon"></i>
+            <span class="hub-title">Practical Exam</span>
+        </a>
+        <a href="/generate_test" class="hub-card">
+            <i class="fas fa-magic hub-icon text-gradient-purple"></i>
+            <span class="hub-title">Generate Q&A</span>
+        </a>
+        <a href="/viewquestions" class="hub-card">
+            <i class="fas fa-eye hub-icon"></i>
+            <span class="hub-title">View Questions</span>
+        </a>
+        <a href="/updatetidlist" class="hub-card">
+            <i class="fas fa-edit hub-icon"></i>
+            <span class="hub-title">Update Questions</span>
+        </a>
+        <a href="/deltidlist" class="hub-card">
+            <i class="fas fa-trash-alt hub-icon" style="color: #ff4b4b;"></i>
+            <span class="hub-title">Delete Questions</span>
+        </a>
+        <a href="/{{session.email}}/disptests" class="hub-card">
+            <i class="fas fa-history hub-icon"></i>
+            <span class="hub-title">Exam History</span>
+        </a>
+        <a href="/livemonitoringtid" class="hub-card">
+            <i class="fas fa-video hub-icon"></i>
+            <span class="hub-title">Live Monitoring</span>
+        </a>
+        <a href="/viewstudentslogs" class="hub-card">
+            <i class="fas fa-users hub-icon"></i>
+            <span class="hub-title">Student Logs</span>
+        </a>
+        <a href="/insertmarkstid" class="hub-card">
+            <i class="fas fa-spell-check hub-icon"></i>
+            <span class="hub-title">Insert Marks</span>
+        </a>
+        <a href="/publish-results-testid" class="hub-card">
+            <i class="fas fa-clipboard-check hub-icon"></i>
+            <span class="hub-title">Publish Results</span>
+        </a>
+        <a href="/{{session.email}}/tests-created" class="hub-card">
+            <i class="fas fa-poll hub-icon"></i>
+            <span class="hub-title">View Results</span>
+        </a>
+        <a href="/report_professor" class="hub-card">
+            <i class="fas fa-bug hub-icon" style="color: #ffcc00;"></i>
+            <span class="hub-title">Report Issue</span>
+        </a>
+        <a href="/payment" class="hub-card">
+            <i class="fas fa-money-bill-alt hub-icon" style="color: #00ff88;"></i>
+            <span class="hub-title">Payments</span>
+        </a>
+        <a href="/changepassword_professor" class="hub-card">
+            <i class="fas fa-key hub-icon"></i>
+            <span class="hub-title">Change Password</span>
+        </a>
+    </div>
+        </div>
+        <div class="col-xl-4 col-lg-12 col-md-12 mb-4 d-flex">
+            <div class="bg-white d-flex align-items-center justify-content-center w-100" style="border-radius: 15px; height: 100%; min-height: 400px; padding: 20px; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);">
+                <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_wEt2nn.json" background="transparent" speed="1" style="width: 100%; max-width: 350px; height: auto;" loop autoplay></lottie-player>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

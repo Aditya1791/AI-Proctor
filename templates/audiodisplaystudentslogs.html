@@ -1,0 +1,92 @@
+{% extends 'professor_dashboard.html' %}
+{% block body %}
+<div class="row align-items-center d-flex  justify-content-center">
+  <div class="col-12 mb-4">
+      <div class="glass-card border-light shadow-sm components-section align-items-center d-flex  justify-content-center">
+          <div class="card-body align-items-center d-flex justify-content-center">     
+               <div class="row mb-4" style="width: 100%;">
+                  <div class="col-12">
+                    <h3 class="h3 text-center mb-4">STUDENT AUDIO LOGS of {{testid}} of {{email}}</h3>  
+                  </div>
+                  
+                  <div class="col-12 mb-3">
+                      <div class="alert alert-info border-info-subtle bg-dark-cyan text-light" style="background: rgba(0, 188, 212, 0.1); border: 1px solid rgba(0, 188, 212, 0.3); border-radius: 10px; padding: 15px;">
+                          <div class="d-flex" style="gap: 12px;">
+                              <div style="font-size: 1.5rem; color: #00bcd4; display: flex; align-items: center;">
+                                  <i class="fas fa-info-circle"></i>
+                              </div>
+                              <div>
+                                  <h5 class="alert-heading font-weight-bold mb-1" style="color: #00bcd4; font-family: 'Orbitron', sans-serif; font-size: 1rem;">Decibel Level Proctoring Active</h5>
+                                  <p class="mb-0" style="font-size: 0.85rem; line-height: 1.4; color: #a5b4fc;">
+                                      To protect student privacy (GDPR compliant) and optimize network bandwidth, the AI proctoring engine does not record or store raw audio files. Instead, it captures and logs the real-time **loudness intensity (in decibels)** of the student's microphone. Volume spikes above safe thresholds indicate ambient speaking or noise disturbances.
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="card-body justify-content-md-center">
+                      <div class="table-responsive">
+                          <table id="example" class="display nowrap" style="width:100%">
+                              <thead class="thead-light">
+                                  <tr>
+<th class="border-0" scope="col" >NAME</th>
+<th class="border-0" scope="col" >MIC INTENSITY / LOUDNESS</th>
+<th class="border-0" scope="col" >PREDICTION</th>
+<th class="border-0" scope="col" >TIME</th>
+</tr>
+</thead>
+<tbody>
+  {% for res in callresults %}
+  <tr>
+  <td>{{res['name']}}</td>
+  <td>
+    <div class="d-flex align-items-center" style="gap: 12px; min-width: 220px;">
+        <div class="progress flex-grow-1" style="height: 12px; background-color: rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 0;">
+            {% set pct = (res['voice_db'] / 50.0 * 100) | round | int %}
+            {% if pct > 100 %}{% set pct = 100 %}{% endif %}
+            <div class="progress-bar {% if res['voice_db'] < 10 %}bg-success{% elif res['voice_db'] < 20 %}bg-warning{% else %}bg-danger{% endif %}" 
+                 role="progressbar" 
+                 style="width: {{ pct }}%; transition: width 0.4s ease;" 
+                 aria-valuenow="{{ res['voice_db'] }}" 
+                 aria-valuemin="0" 
+                 aria-valuemax="50">
+            </div>
+        </div>
+        <span class="badge {% if res['voice_db'] < 10 %}badge-success{% elif res['voice_db'] < 20 %}badge-warning{% else %}badge-danger{% endif %}" style="font-size: 0.8rem; min-width: 55px; text-align: center; color: #fff; background-color: {% if res['voice_db'] < 10 %}#28a745{% elif res['voice_db'] < 20 %}#ffc107{% else %}#dc3545{% endif %};">
+            {{ res['voice_db'] }} dB
+        </span>
+    </div>
+  </td>
+  <td>
+  {% if res['voice_db'] < 10 %}
+  <h6 class="text-success font-weight-bold"> Normal</h6>
+  {% elif res['voice_db'] >= 10 and res['voice_db'] < 20 %}
+  <h6 class="text-warning font-weight-bold">Little Disturbance</h6>
+  {% else %}
+  <h6 class="text-danger font-weight-bold">More Disturbance</h6>
+  {% endif %}
+  </td>
+  <td>{{res['log_time']}}</td>
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+      </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+  $('#example').DataTable( {
+      dom: 'Bfrtip',
+      buttons: [
+          'copy', 'csv', 'excel', 'pdf', 'print'
+      ]
+  } );
+} );
+</script>
+{% endblock %}
