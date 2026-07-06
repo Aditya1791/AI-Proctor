@@ -1,0 +1,119 @@
+/* 
+ * Pixel UI Kit - Baseline Bootstrap Overrides 
+ * Clean, modern base styles mimicking Themesberg Pixel Kit
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --primary: #1F2937;
+  --secondary: #4B5563;
+  --success: #10B981;
+  --info: #3B82F6;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --light: #F3F4F6;
+  --dark: #111827;
+  
+  --font-family-sans-serif: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  font-family: var(--font-family-sans-serif);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--secondary);
+  background-color: var(--light);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-sans-serif);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #ffffff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  transition: all 0.25s ease;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.btn {
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.form-control, .custom-select {
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--primary);
+  background-color: #ffffff;
+  background-clip: padding-box;
+  border: 1px solid #D1D5DB;
+  border-radius: 0.5rem;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus, .custom-select:focus {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  outline: 0;
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--secondary);
+  text-align: center;
+  white-space: nowrap;
+  background-color: var(--light);
+  border: 1px solid #D1D5DB;
+  border-radius: 0.5rem;
+}
+
+.input-group > .form-control {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.input-group > .input-group-prepend > .input-group-text {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Accordion Styling */
+.accordion .card {
+  margin-bottom: 0.75rem;
+}
+
+.accordion-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2rem;
+  text-decoration: none !important;
+  color: var(--primary);
+  font-weight: 600;
+}

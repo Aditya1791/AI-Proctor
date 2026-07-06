@@ -2,7 +2,6 @@ node_modules/
 dist/
 html&css/
 .temp/
-css/
 *.zip
 models/yolov3.weights
 __MACOSX/

@@ -1,0 +1,338 @@
+/*
+ * Futuristic Cyber-Neon Redesign CSS
+ * High-end Cyberpunk, Glassmorphism, and Premium Neon-glow UI Kit overrides
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --neon-cyan: #00f3ff;
+  --neon-purple: #bf55ec;
+  --neon-magenta: #ff007f;
+  --neon-green: #39ff14;
+  --bg-dark: #06070a;
+  --bg-card: rgba(10, 12, 22, 0.45);
+  --border-glass: rgba(255, 255, 255, 0.06);
+  --border-glow-cyan: rgba(0, 243, 255, 0.25);
+  --border-glow-purple: rgba(191, 85, 236, 0.25);
+  
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  
+  --glow-shadow-cyan: 0 0 15px rgba(0, 243, 255, 0.35), 0 0 30px rgba(0, 243, 255, 0.15);
+  --glow-shadow-purple: 0 0 15px rgba(191, 85, 236, 0.35), 0 0 30px rgba(191, 85, 236, 0.15);
+}
+
+/* Custom Selection & Scrollbars */
+::selection {
+  background: rgba(0, 243, 255, 0.3);
+  color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  background-color: var(--bg-dark);
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 1px solid var(--border-glass);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--neon-purple), var(--neon-cyan));
+  border-radius: 5px;
+  border: 2px solid var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-cyan);
+}
+
+/* Base Styles & Ambient Background Orbs */
+body.content-bg, .content-bg {
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-dark) !important;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(191, 85, 236, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 50% 10%, rgba(255, 0, 127, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 50% 90%, rgba(8, 9, 13, 1) 0%, rgba(2, 2, 4, 1) 100%) !important;
+  background-attachment: fixed;
+  color: var(--text-main) !important;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.content {
+  background: transparent !important;
+}
+
+/* Typography & Space Grotesk Header Theme */
+h1, h2, h3, .h1, .h2, .h3 {
+  font-family: 'Space Grotesk', sans-serif !important;
+  letter-spacing: -0.025em;
+  font-weight: 700 !important;
+}
+
+.display-2 {
+  font-size: 3.5rem !important;
+  font-weight: 800 !important;
+  line-height: 1.15;
+}
+
+.lead {
+  font-size: 1.15rem !important;
+  line-height: 1.7;
+}
+
+/* Futuristic Text Gradients */
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #00f3ff 20%, #0072ff 80%);
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 2px 8px rgba(0, 243, 255, 0.15));
+}
+
+.text-gradient-purple {
+  background: linear-gradient(135deg, #bf55ec 20%, #f146e1 80%);
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 2px 8px rgba(191, 85, 236, 0.15));
+}
+
+/* Glassmorphism Cards & Glass-glow Effect */
+.glass-card {
+  background: var(--bg-card) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid var(--border-glass) !important;
+  border-radius: 24px !important;
+  box-shadow: 
+    0 4px 30px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05) !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  overflow: hidden;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px) scale(1.01);
+  border-color: rgba(0, 243, 255, 0.25) !important;
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.6), 
+    0 0 30px rgba(0, 243, 255, 0.12),
+    inset 0 1px 2px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Glass Navbar */
+.glass-navbar {
+  background: rgba(6, 7, 10, 0.7) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4) !important;
+  padding: 0.9rem 1rem !important;
+  transition: all 0.3s ease;
+}
+
+/* Neon Glow Buttons */
+.btn-neon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 28px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--neon-cyan) !important;
+  background: rgba(0, 243, 255, 0.02);
+  border: 1px solid var(--neon-cyan) !important;
+  border-radius: 30px !important;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
+  box-shadow: 
+    0 0 15px rgba(0, 243, 255, 0.1),
+    inset 0 1px 1px rgba(0, 243, 255, 0.1) !important;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  text-decoration: none !important;
+}
+
+.btn-neon:hover {
+  background: var(--neon-cyan) !important;
+  color: var(--bg-dark) !important;
+  box-shadow: 
+    0 0 30px rgba(0, 243, 255, 0.6),
+    0 0 10px rgba(0, 243, 255, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+  text-shadow: none !important;
+  transform: translateY(-3px);
+}
+
+.btn-neon-purple {
+  color: var(--neon-purple) !important;
+  border-color: var(--neon-purple) !important;
+  background: rgba(191, 85, 236, 0.02);
+  text-shadow: 0 0 8px rgba(191, 85, 236, 0.4);
+  box-shadow: 
+    0 0 15px rgba(191, 85, 236, 0.1),
+    inset 0 1px 1px rgba(191, 85, 236, 0.1) !important;
+}
+
+.btn-neon-purple:hover {
+  background: var(--neon-purple) !important;
+  color: var(--text-main) !important;
+  box-shadow: 
+    0 0 30px rgba(191, 85, 236, 0.6),
+    0 0 10px rgba(191, 85, 236, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Premium Form Inputs Overrides */
+.form-control, .custom-select {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-main) !important;
+  border-radius: 12px !important;
+  padding: 0.85rem 1.4rem !important;
+  transition: all 0.3s ease !important;
+}
+
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.form-control:focus, .custom-select:focus {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: var(--neon-cyan) !important;
+  box-shadow: 
+    0 0 20px rgba(0, 243, 255, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.02) !important;
+}
+
+.input-group-text {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: var(--neon-cyan) !important;
+  border-radius: 12px !important;
+}
+
+/* Spacers & Spacing Classes */
+.my-large {
+  margin-top: 6rem !important;
+  margin-bottom: 6rem !important;
+}
+
+/* Neon Icon Box & Micro-animation */
+.icon-box {
+  background: rgba(255, 255, 255, 0.01) !important;
+  border: 1px solid var(--border-glass) !important;
+  border-radius: 20px !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.02) !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.icon-box:hover {
+  transform: translateY(-8px);
+  border-color: var(--border-glow-purple) !important;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(191, 85, 236, 0.08) !important;
+}
+
+.icon-box .icon {
+  margin-bottom: 1.5rem;
+}
+
+/* Clean Custom Feature List */
+.feature-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.feature-list li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 0.9rem;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.feature-list li::before {
+  content: "✦";
+  position: absolute;
+  left: 0;
+  color: var(--neon-cyan);
+  font-size: 0.95rem;
+  text-shadow: 0 0 8px var(--neon-cyan);
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { text-shadow: 0 0 8px var(--neon-cyan); opacity: 0.7; }
+  50% { text-shadow: 0 0 15px var(--neon-cyan); opacity: 1; }
+}
+
+/* Map IFrame Styling */
+.map {
+  border: 1px solid var(--border-glass) !important;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+  transition: border-color 0.3s ease;
+}
+
+.map:hover {
+  border-color: var(--neon-cyan) !important;
+}
+
+/* Premium Footer */
+.sticky-footer-futuristic {
+  background: rgba(4, 5, 8, 0.95) !important;
+  border-top: 1px solid var(--border-glass) !important;
+  padding: 2.5rem 0 !important;
+}
+
+/* SweetAlert 2 Customizations for Cyber Theme */
+.swal2-popup {
+  background: var(--bg-dark) !important;
+  border: 1px solid var(--neon-cyan) !important;
+  border-radius: 20px !important;
+  color: var(--text-main) !important;
+  box-shadow: var(--glow-shadow-cyan) !important;
+}
+
+.swal2-title, .swal2-html-container {
+  color: var(--text-main) !important;
+}
+
+.swal2-confirm {
+  background-color: transparent !important;
+  border: 1px solid var(--neon-cyan) !important;
+  color: var(--neon-cyan) !important;
+  box-shadow: var(--glow-shadow-cyan) !important;
+}
+
+.swal2-confirm:hover {
+  background-color: var(--neon-cyan) !important;
+  color: var(--bg-dark) !important;
+}
+
+/* Pulse Animations */
+.neon-pulse-cyan {
+  animation: pulse-cyan 3s infinite ease-in-out;
+}
+
+.neon-pulse-purple {
+  animation: pulse-purple 3s infinite ease-in-out;
+}
+
+@keyframes pulse-cyan {
+  0%, 100% { filter: drop-shadow(0 0 5px rgba(0, 243, 255, 0.3)); }
+  50% { filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.6)); }
+}
+
+@keyframes pulse-purple {
+  0%, 100% { filter: drop-shadow(0 0 5px rgba(191, 85, 236, 0.3)); }
+  50% { filter: drop-shadow(0 0 15px rgba(191, 85, 236, 0.6)); }
+}
