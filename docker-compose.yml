@@ -1,0 +1,34 @@
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: quizapp
+    volumes:
+      - ./DB/quizappstructure.sql:/docker-entrypoint-initdb.d/quizappstructure.sql
+      - db_data:/var/lib/mysql
+    ports:
+      - "5000:3306"
+    command: --default-authentication-plugin=mysql_native_password
+
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "5001:5000"
+    environment:
+      - FLASK_ENV=development
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MAIL_SERVER=smtp.gmail.com
+      - MAIL_PORT=587
+      - MAIL_USERNAME=aimlprojects1791@gmail.com
+      - MAIL_PASSWORD=mdck tzuo lniy ynmu
+      - MAIL_USE_TLS=True
+      - MAIL_USE_SSL=False
+    depends_on:
+      - db
+
+volumes:
+  db_data:

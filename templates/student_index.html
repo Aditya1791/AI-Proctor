@@ -1,0 +1,90 @@
+{% extends 'student_dashboard.html' %}
+{% block body %}
+<style>
+    .hub-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+        padding: 20px 0;
+        justify-content: center;
+    }
+    .hub-card {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(0, 243, 255, 0.2);
+        border-radius: 15px;
+        padding: 30px 15px;
+        text-align: center;
+        transition: all 0.3s ease;
+        text-decoration: none !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 200px; /* Square form */
+        position: relative;
+        overflow: hidden;
+    }
+    .hub-card:hover {
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.3), inset 0 0 10px rgba(0, 243, 255, 0.1);
+        transform: translateY(-5px);
+    }
+    .hub-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.1), transparent);
+        transition: all 0.5s ease;
+        z-index: 0;
+    }
+    .hub-card:hover::before {
+        left: 100%;
+    }
+    .hub-icon {
+        font-size: 3rem;
+        color: var(--neon-cyan);
+        margin-bottom: 20px;
+        z-index: 1;
+    }
+    .hub-title {
+        color: var(--text-main);
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1rem;
+        font-weight: bold;
+        z-index: 1;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="text-gradient-purple">Student Hub</h1>
+            <p class="text-muted">Welcome back, {{session.name}}. Select an action below.</p>
+        </div>
+    </div>
+    
+    <div class="hub-grid">
+        <a href="#" onclick="return funStartExam()" class="hub-card">
+            <i class="fas fa-clipboard-list hub-icon text-gradient-cyan"></i>
+            <span class="hub-title">Give Exam</span>
+        </a>
+        <a href="/{{session.email}}/student_test_history" class="hub-card">
+            <i class="fas fa-history hub-icon"></i>
+            <span class="hub-title">Exam History</span>
+        </a>
+        <a href="/{{session.email}}/tests-given" class="hub-card">
+            <i class="fas fa-poll hub-icon text-gradient-purple"></i>
+            <span class="hub-title">Results</span>
+        </a>
+        <a href="/report_student" class="hub-card">
+            <i class="fas fa-bug hub-icon" style="color: #ffcc00;"></i>
+            <span class="hub-title">Report Issue</span>
+        </a>
+        <a href="/changepassword_student" class="hub-card">
+            <i class="fas fa-key hub-icon"></i>
+            <span class="hub-title">Change Password</span>
+        </a>
+    </div>
+</div>
+{% endblock %}
